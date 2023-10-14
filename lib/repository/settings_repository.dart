@@ -1,12 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/path_util.dart';
 
 class SettingsRepository {
   Future<ThemeMode> themeMode() async {
+    if (kIsWeb) {
+      return ThemeMode.system;
+    }
+
     File config = File('${PathUtil.getAppSupportPath()}/config.json');
 
     if (config.existsSync() == false) {
@@ -31,6 +36,10 @@ class SettingsRepository {
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
+    if (kIsWeb) {
+      return;
+    }
+
     File config = File('${PathUtil.getAppSupportPath()}/config.json');
 
     switch (theme) {
