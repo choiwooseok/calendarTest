@@ -9,21 +9,21 @@ class SettingsRepository {
   Future<ThemeMode> themeMode() async {
     File config = File('${PathUtil.getAppSupportPath()}/config.json');
 
-    if (config.existsSync()) {
-      String configContent = config.readAsStringSync();
-      var json = jsonDecode(configContent);
-      String theme = json['themeMode'];
-
-      if (theme == 'light') {
-        return ThemeMode.light;
-      } else if (theme == 'dark') {
-        return ThemeMode.dark;
-      } else if (theme == 'system') {
-        return ThemeMode.system;
-      }
-    } else {
+    if (config.existsSync() == false) {
       config.createSync(recursive: true);
       config.writeAsStringSync('{"themeMode": "system"}');
+    }
+
+    String configContent = config.readAsStringSync();
+    var json = jsonDecode(configContent);
+    String theme = json['themeMode'];
+
+    if (theme == 'light') {
+      return ThemeMode.light;
+    } else if (theme == 'dark') {
+      return ThemeMode.dark;
+    } else if (theme == 'system') {
+      return ThemeMode.system;
     }
 
     return ThemeMode.system;
