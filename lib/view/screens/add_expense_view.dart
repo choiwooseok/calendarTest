@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'expense_item.dart';
+import '../../model/expense_item.dart';
 
 class AddExpenseView extends StatelessWidget {
   const AddExpenseView(this.selectedDay, {Key? key}) : super(key: key);

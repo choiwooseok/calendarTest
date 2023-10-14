@@ -1,18 +1,21 @@
+import 'package:calendar_test/repository/expense_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'src/app.dart';
-import 'src/expense_feature/expense_items.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
+import 'app.dart';
+import 'view_model/expense_vm.dart';
+import 'view_model/settings_vm.dart';
+import 'repository/settings_repository.dart';
 
 void main() async {
-  final settingsController = SettingsController(SettingsService());
+  final settingViewModel = SettingsViewModel(SettingsRepository());
+  await settingViewModel.loadSettings();
 
-  await settingsController.loadSettings();
+  final expenseViewModel = ExpenseViewModel(ExpenseRepository());
+  await expenseViewModel.loadExpenses();
 
   runApp(ChangeNotifierProvider(
-    create: (_) => ExpenseItems(),
-    child: MyApp(settingsController: settingsController),
+    create: (_) => expenseViewModel,
+    child: MyApp(settingsViewModel: settingViewModel),
   ));
 }
