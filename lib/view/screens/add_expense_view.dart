@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../model/expense_item.dart';
 
@@ -32,8 +33,11 @@ class AddExpenseView extends StatelessWidget {
               controller: amountController,
               decoration: const InputDecoration(
                 labelText: 'Amount',
+                hintText: 'Enter a number',
               ),
-              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)'))
+              ],
             ),
             const SizedBox(height: 20),
             ElevatedButton(
