@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'add_expense_view.dart';
-import '../../view_model/expense_vm.dart';
+import 'add_event_view.dart';
+import '../../view_model/events_vm.dart';
 
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
@@ -27,11 +27,11 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
-    final expenseViewModel = Provider.of<ExpenseViewModel>(context);
+    final eventsViewModel = Provider.of<EventsViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expense Tracker'),
+        title: const Text('Event Tracker'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.settings),
@@ -45,7 +45,7 @@ class _CalendarViewState extends State<CalendarView> {
             height: 30,
           ),
           Text(
-            'Total Outcome : ${expenseViewModel.accumulateExpensesByMonth(_selectedDay!)}',
+            'Total Sum : ${eventsViewModel.accumulateEventsByMonth(_selectedDay!)}',
           ),
           TableCalendar(
             calendarFormat: CalendarFormat.month,
@@ -62,12 +62,12 @@ class _CalendarViewState extends State<CalendarView> {
             onDaySelected: (selectedDay, focusedDay) {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
-              expenseViewModel.filterByDate(selectedDay);
+              eventsViewModel.filterByDate(selectedDay);
             },
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
             },
-            eventLoader: (day) => expenseViewModel.getExpensesByDate(day),
+            eventLoader: (day) => eventsViewModel.getEventsByDate(day),
             calendarBuilders: CalendarBuilders(
               singleMarkerBuilder: (context, date, _) {
                 return Container(
@@ -83,15 +83,15 @@ class _CalendarViewState extends State<CalendarView> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: expenseViewModel.filteredExpenses.length,
+              itemCount: eventsViewModel.filteredEvents.length,
               itemBuilder: (context, index) {
-                final expense = expenseViewModel.filteredExpenses[index];
+                final event = eventsViewModel.filteredEvents[index];
                 return ListTile(
-                  title: Text(expense.name),
-                  subtitle: Text(expense.amount.toString()),
+                  title: Text(event.name),
+                  subtitle: Text(event.amount.toString()),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: () => expenseViewModel.deleteExpense(expense),
+                    onPressed: () => eventsViewModel.deleteEvent(event),
                   ),
                 );
               },
@@ -101,16 +101,16 @@ class _CalendarViewState extends State<CalendarView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final newExpense = await Navigator.push(
+          final newEvent = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddExpenseView(_selectedDay),
+              builder: (context) => AddEventView(_selectedDay),
             ),
           );
-          if (newExpense != null) {
-            expenseViewModel.addExpense(newExpense);
-            _selectedDay = newExpense.date;
-            expenseViewModel.filterByDate(_selectedDay!);
+          if (newEvent != null) {
+            eventsViewModel.addEvent(newEvent);
+            _selectedDay = newEvent.date;
+            eventsViewModel.filterByDate(_selectedDay!);
           }
         },
         child: const Icon(Icons.add),

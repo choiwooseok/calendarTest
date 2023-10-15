@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../model/expense_item.dart';
+import '../../model/event.dart';
 
-class AddExpenseView extends StatelessWidget {
-  const AddExpenseView(this.selectedDay, {Key? key}) : super(key: key);
+class AddEventView extends StatelessWidget {
+  const AddEventView(this.selectedDay, {Key? key}) : super(key: key);
 
   final DateTime? selectedDay;
 
@@ -15,7 +15,7 @@ class AddExpenseView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Expense'),
+        title: const Text('Add Event'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -47,7 +47,7 @@ class AddExpenseView extends StatelessWidget {
                 if (name.isNotEmpty && amount > 0.0) {
                   Navigator.pop(
                     context,
-                    Expense(name: name, amount: amount, date: selectedDay!),
+                    Event(name: name, amount: amount, date: selectedDay!),
                   );
                 }
               },
